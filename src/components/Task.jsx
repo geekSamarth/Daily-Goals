@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 function Task() {
   return (
@@ -6,7 +6,7 @@ function Task() {
       <p>Title</p>
       <span>Description</span>
     </div>
-  )
+  );
 }
 
-export default Task
+export default Task;
