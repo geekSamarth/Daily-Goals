@@ -1,23 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Task from "./components/Task";
 function App() {
-  const [tasks, setTasks] = useState([]);
+  const initialArray = localStorage.getItem("tasks")
+    ? JSON.parse(localStorage.getItem("tasks"))
+    : [];
+  const [tasks, setTasks] = useState(initialArray);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
   const submitHandler = (e) => {
     e.preventDefault();
-    setTasks([...tasks, { title, description }]);
+    setTasks([...tasks, { title: title, description: description }]);
     setTitle("");
-    setDescription(""); 
+    setDescription("");
   };
 
   const deleteTask = (index) => {
-    const filteredArr = tasks.filter((val,i)=>{
-      return i!=index
-    })
+    const filteredArr = tasks.filter((val, i) => {
+      return i !== index;
+    });
     setTasks(filteredArr);
   };
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
   return (
     <>
       <div className="w-full min-h-screen bg-stone-950 box-border pb-10">
@@ -57,9 +64,16 @@ function App() {
             </form>
           </div>
         </div>
-        {tasks.map((item, index) => (
-          <Task key={index} title={item.title} description={item.description} deleteTask={deleteTask} index={index}/>
-        ))}
+        {tasks &&
+          tasks?.map((item, index) => (
+            <Task
+              key={index}
+              title={item.title}
+              description={item.description}
+              deleteTask={deleteTask}
+              index={index}
+            />
+          ))}
       </div>
     </>
   );
